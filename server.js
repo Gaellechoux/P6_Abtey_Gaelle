@@ -1,6 +1,6 @@
+//  importation du package HTTP natif de Node et l'utilisez pour créer un serveur
 const http = require('http');
 const app = require('./app');
-
 
 //renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne
 const normalizePort = val => {

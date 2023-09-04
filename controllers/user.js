@@ -1,11 +1,12 @@
+//Importation du package bcrypt qu'in installe
 const bcrypt = require('bcrypt');
 // Package permettant de créer des token et de les vérifiés
 const jwt = require('jsonwebtoken'); 
 
-
+// Models User importer 
 const Users = require('../models/Users');
 
-// enregistrement de nouveaux utilisateurs
+// Enregistrement de nouveaux utilisateurs
 exports.signup = (req, res, next) => {
   console.log(req.body);
     bcrypt.hash(req.body.password, 10)

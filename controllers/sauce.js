@@ -2,6 +2,8 @@ const { log } = require('console');
 const Sauce = require('../models/sauce');
 const fs = require('fs');
 
+// Exportation de la fonction createSauce
+// créer une sauce
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
@@ -19,25 +21,29 @@ exports.createSauce = (req, res, next) => {
   .catch(error => { res.status(400).json( { error })})
   
 };
-
+// Affichage de toutes les sauce 
   exports.getAllSauces =  (req, res, next) => {
+    // pour l'affichage de toutes les sauce on utilise find()
     Sauce.find()
     .then(sauces => res.status(200).json(sauces))
     .catch(error => res.status(400).json({ error }));
     }
 
+    // pour l'affichage d'une sauce 
     exports.getOneSauce = (req, res, next) => {
-        // console.log(req.params.id);
+
+   // on utilise le modele mangoose et findOne pour trouver un objet via la comparaison req.params.id
         Sauce.findOne({ _id: req.params.id })
           .then(sauce => res.status(200).json(sauce))
           .catch(error => res.status(404).json({ error }));
       }
 
+    //   Suppression d'une saute 
      exports.deleteSauce = (req, res, next) => {
         Sauce.findOne({ _id: req.params.id})
           .then(sauce => {
               if (sauce.userId != req.auth.userId) {
-                  res.status(401).json({message: 'Not authorized'});
+                  res.status(401).json({message: 'Non-autorisé'});
               } else {
                   const filename = sauce.imageUrl.split('/images/')[1];
                   fs.unlink(`images/${filename}`, () => {
@@ -63,7 +69,7 @@ exports.createSauce = (req, res, next) => {
       Sauce.findOne({_id: req.params.id})
           .then((sauce) => {
               if (sauce.userId != req.auth.userId) {
-                  res.status(401).json({ message : 'Not authorized'});
+                  res.status(401).json({ message : 'Non autorisé'});
               } else {
                   Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
                   .then(() => res.status(200).json({message : 'Sauce enregistrée!'}))
@@ -76,13 +82,11 @@ exports.createSauce = (req, res, next) => {
       }
 
 
-      exports.likeSauce = (req, res, next) => {
+exports.likeSauce = (req, res, next) => {
 
-            const like = req.body.like;
-        // console.log(like);
+    const like = req.body.like;
 
         if(like === 1) {
-
             console.log(like);
          Sauce.updateOne(
             { _id: req.params.id},
@@ -94,14 +98,11 @@ exports.createSauce = (req, res, next) => {
              
              }
          )
-         .then(() => res.status(200).json({message : 'I like this sauce!'}))
+         .then(() => res.status(200).json({message : 'Tu aimes cette sauce!'}))
          .catch(error => res.status(400).json({ error }));
-        }
- 
-    
+        }  
 
        else if(like === -1) {
-
             console.log(like);
          Sauce.updateOne( 
             { _id: req.params.id},  
@@ -110,14 +111,12 @@ exports.createSauce = (req, res, next) => {
                 $inc: { dislikes: 1},
                 $set: {usersDisliked: req.body.userId}, 
                 _id: req.params.id 
-              
              
              }
          )
-         .then(() => res.status(200).json({message : 'I like this sauce!'}))
+         .then(() => res.status(200).json({message : 'Tu aimes pas cette sauce!'}))
          .catch(error => res.status(400).json({ error }));
         }
-
 
         else {    // annulation du bouton j'aime et je n'aime pas
             Sauce.findOne( {_id: req.params.id})
@@ -128,7 +127,7 @@ exports.createSauce = (req, res, next) => {
                         $inc: { likes: -1},
                         $pull: { usersLiked: req.body.userId}, 
                         _id: req.params.id })
-                    .then( () => res.status(200).json({ message: 'You don\'t like this sauce anymore ' }))
+                    .then( () => res.status(200).json({ message: 'Tu n\'aimes plus cette sauce ' }))
                     .catch( error => res.status(400).json({ error}))
                     }
     
@@ -140,7 +139,7 @@ exports.createSauce = (req, res, next) => {
                     _id: req.params.id
                 }
                 )
-                    .then( () => res.status(200).json({ message: 'You might like this sauce now ' }))
+                    .then( () => res.status(200).json({ message: 'Tu peux aimer cette sauce!' }))
                     .catch( error => res.status(400).json({ error}))
                     }           
             })

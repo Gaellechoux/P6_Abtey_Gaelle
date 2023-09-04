@@ -1,3 +1,4 @@
+// Importation du package mongoose
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator'); // package vérification d'un email unique
 
