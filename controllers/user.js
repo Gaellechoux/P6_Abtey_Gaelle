@@ -1,4 +1,4 @@
-//Importation du package bcrypt qu'in installe
+//Importation du package bcrypt qu'on installe
 const bcrypt = require('bcrypt');
 // Package permettant de créer des token et de les vérifiés
 const jwt = require('jsonwebtoken'); 

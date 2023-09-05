@@ -1,4 +1,5 @@
 // Importation de jsonwebtoken
+// Package permettant de créer des token et de les vérifiés
 const jwt = require('jsonwebtoken');
  
 module.exports = (req, res, next) => {
